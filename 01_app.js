@@ -85,7 +85,26 @@ app.get('/adresse', function (req, res) {
 
 
 //////////////////////////////////////////  Route Rechercher
+app.post('/rechercher',  (req, res) => {
+   let recherche = req.body.recherche.toLowerCase()
+   let regRecherche = new RegExp(recherche, 'i')
+   var match = regRecherche.exec(recherche);
+  console.log("match[0] = " + match[0]); 
+  console.log("match[1] = " + match[1]); 
 
+   console.log(recherche)
+   let cursor = db.collection('adresse')
+                .find({$or: [ 
+                        {nom: {$regex :regRecherche, $options: "$i"}},
+                        {prenom: {$regex :regRecherche, $options: "$i"}},
+                        {telephone: {$regex :regRecherche, $options: "$i"}},
+                        {courriel: {$regex :regRecherche, $options: "$i"}}
+                      ]
+                    }).toArray(function(err, resultat){
+ if (err) return console.log(err)        
+ res.render('adresse.ejs', {adresses: resultat, recherche:recherche})   
+  });
+})
 
 ////////////////////////////////////////// Route /ajouter
 app.post('/ajouter', (req, res) => {
