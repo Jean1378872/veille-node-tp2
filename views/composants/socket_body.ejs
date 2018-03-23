@@ -1,7 +1,7 @@
 <h2>Clavardage</h2>
 <section id="enregistrement">
  <input type="text">
- <button onclick="enregistrement()">Enregistrement</button>
+ <button onclick="enregistrement()"><%= __('Enregistrement') %> </button>
 </section>
 <section id="chat" style="display:none;">
 	<table id="list_user">
@@ -13,7 +13,7 @@
 	</table>
 </div>
 	<section id="message_a_transmettre">
-		<input type="text" name="txtMessage"><button onclick="envoi()">Envoyer</button>
+		<input type="text" name="txtMessage"><button onclick="envoi()"><%= __('Envoyer') %> </button>
 	</section>
 </section>
 <script type="text/javascript">
