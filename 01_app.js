@@ -3,39 +3,22 @@ const fs = require('fs');
 const util = require("util");
 const app = express();
 
-
 const server = require('http').createServer(app);
 const io = require('./mes_modules/chat_socket').listen(server);
-
 
 const bodyParser= require('body-parser');
 const MongoClient = require('mongodb').MongoClient; // le pilote MongoDB
 const ObjectID = require('mongodb').ObjectID;
 app.use(bodyParser.urlencoded({extended: true}));
+
+
 /* on associe le moteur de vue au module «ejs» */
 const cookieParser = require('cookie-parser');
 app.use(cookieParser())
-
-
- 
- ///*****SOCKET.IO*******/////
-/*const express = require('express')
-var app = express();*/
-
-//io.on('connection', function(){ /* … */ });
-//server.listen(3000);
-
-//app.use(express.static('public')) // pour utiliser le dossier public app.set('view engine', 'ejs'); ;
-
-//app.use(express.static('public'));
-
-//app.get('/chat', [interface_chat])
-///////////////////////////////////
-
 app.use(express.static(__dirname + '/public'))
 
 
-
+/////////// i18n //////////////
 
 const i18n = require("i18n");
 
@@ -48,6 +31,8 @@ i18n.configure({
 /* Ajouter l'objet i18n à l'objet global «res» */
 app.use(i18n.init);
 
+
+////////////////////////
 
 let db // variable qui contiendra le lien sur la BD
 
@@ -80,12 +65,13 @@ app.get('/:lang(en|fr)', (req, res) =>{
   res.redirect(req.headers.referer);
 });
 
+
 //////////////////////////////////////////
 app.get('/', function (req, res) {
 
  res.render('accueil.ejs')  
  
-  });
+});
 
 
 //////////////////////////////////////////  Route Adresse
@@ -96,10 +82,11 @@ app.get('/adresse', function (req, res) {
  res.render('adresse.ejs', {adresses: resultat})   
   });
 })
-//////////////////////////////////////////  Route Rechercher
-app.post('/rechercher',  (req, res) => {
 
-})
+
+//////////////////////////////////////////  Route Rechercher
+
+
 ////////////////////////////////////////// Route /ajouter
 app.post('/ajouter', (req, res) => {
 console.log('route /ajouter')	
@@ -201,29 +188,4 @@ app.post('/ajax_ajouter', (req, res) => {
   })
 })
 
-
-/* Est exécuté une seule fois */
-/*io.on('connection', function(socket){
-console.log(socket.id)
-socket.on('setUser', function(data){
-   console.log('setUser')
-   console.log(data.user)
-   socket.emit('ackUser', data)
-   })
-}); // une connexion socket
-let message = "Chat socket"
-res.render('vue_socket.ejs', {message : message})
-}
-
-io.on('connection', function(socket){ // l'écouteur général
-     socket.on('disconnect', function(){ }); 
-     socket.on('setUser', function(data){})
-});
-
-socket.emit('user_valide', data) // émettre vers le socket actif
-
-io.sockets.emit('message_diffuse', data) // émettre vers l'ensemble
-
-io.to(socket.id).emit('message_prive', data)// émettre vers un spécifique*/
-//////////////////////////////////////////////////////
 
